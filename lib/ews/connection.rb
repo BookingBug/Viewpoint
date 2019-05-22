@@ -114,8 +114,11 @@ class Viewpoint::EWS::Connection
   # @param soapmsg [String]
   # @param opts [Hash] misc opts for handling the Response
   def dispatch_async(ews, soapmsg, opts)
+    puts "Im in Viewpoint dispatch_async about to call post_async with soapmsg: #{soapmsg}, Time: #{Time.now}"
+    Rails.logger.info "Im in Viewpoint get_streaming_events inside call do_soap_request_async about to call connection.dispatch_async, Time: #{Time.now}" rescue nil
     streaming_connection = post_async(soapmsg)
-
+    puts "Im in Viewpoint dispatch_async about to call post_async finished Time: #{Time.now}"
+    Rails.logger.info "Im in Viewpoint dispatch_async about to call post_async finished Time: #{Time.now}" rescue nil
     if opts[:raw_response]
       streaming_connection # Returns the HTTPClient::Connection instance as a result
     else
@@ -179,6 +182,8 @@ class Viewpoint::EWS::Connection
   # Send a asynchronous POST to the web service which creates a connection for sending/receiving data
   # @return [HTTPClient::Connection] HTTPClient::Connection
   def post_async(xmldoc)
+    puts "Im in Viewpoint post_async about to call @httpcli.post_async Time: #{Time.now}"
+    Rails.logger.info "Im in Viewpoint post_async about to call @httpcli.post_async Time: #{Time.now}" rescue nil
     headers = {'Content-Type' => 'text/xml', 'Return-Client-Request-Id' => 'true', 'Send-Client-Latencies' => 'true'}
     @httpcli.post_async(@endpoint, xmldoc, headers, request_body: xmldoc)
   end
