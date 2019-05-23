@@ -149,7 +149,7 @@ module Viewpoint::EWS::SOAP
       # TODO: Once do_soap_request_async support raw_response, returns GetStreamingEventResponse results
        puts "[#{group_name}] ---- {Debugger 7 -- #{Time.now}} Im in Viewpoint get_streaming_events about to call do_soap_request_async"
       Rails.logger.info "[#{group_name}] ---- {Debugger 7 -- #{Time.now}} Im in Viewpoint get_streaming_events about to call do_soap_request_async" rescue nil
-      do_soap_request_async(req, raw_response: true)
+      do_soap_request_async(req, raw_response: true, group_name: group_name)
     end
 
 
