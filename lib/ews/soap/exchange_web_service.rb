@@ -246,6 +246,7 @@ module Viewpoint::EWS::SOAP
       EOF
       puts "[#{group_name}] ---- {Debugger 9 -- #{Time.now}} Im in Viewpoint get_streaming_events inside call do_soap_request_async about to call connection.dispatch_async"
       Rails.logger.info "[#{group_name}] ---- {Debugger 9 -- #{Time.now}} Im in Viewpoint get_streaming_events inside call do_soap_request_async about to call connection.dispatch_async" rescue nil
+      puts "[#{group_name}] ---- my connection class is: #{connection.class}"
       connection.dispatch_async(self, soapmsg, opts)
     end
 
