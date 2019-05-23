@@ -232,9 +232,9 @@ module Viewpoint::EWS::SOAP
     # @todo make this work for Viewpoint (imported from SPWS)
     # @param [Hash] opts misc options
     # @option opts [Boolean] :raw_response if true do not parse and return the raw connection
-    def do_soap_request_async(soapmsg, opts = {})
-      puts "Im in Viewpoint get_streaming_events inside do_soap_request_async"
-      Rails.logger.info "Im in Viewpoint get_streaming_events inside call do_soap_request_async" rescue nil
+    def do_soap_request_async(soapmsg, opts = {}, group_name: "not_set")
+
+      Rails.logger.info "[#{group_name}] ---- {Debugger 8 -- #{Time.now}} Im in Viewpoint get_streaming_events inside call do_soap_request_async" rescue nil
 
       @log.debug <<-EOF.gsub(/^ {8}/, '')
         Sending SOAP Request:
@@ -244,9 +244,7 @@ module Viewpoint::EWS::SOAP
         #{opts}
         ----------------
       EOF
-
-      puts "Im in Viewpoint get_streaming_events inside do_soap_request_async about to call connection.dispatch_async"
-      Rails.logger.info "Im in Viewpoint get_streaming_events inside call do_soap_request_async about to call connection.dispatch_async" rescue nil
+      Rails.logger.info "[#{group_name}] ---- {Debugger 9 -- #{Time.now}} Im in Viewpoint get_streaming_events inside call do_soap_request_async about to call connection.dispatch_async" rescue nil
       connection.dispatch_async(self, soapmsg, opts)
     end
 

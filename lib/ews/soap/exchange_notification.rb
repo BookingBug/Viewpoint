@@ -126,31 +126,24 @@ module Viewpoint::EWS::SOAP
     #
     # @param [Array] subscription_ids Subscription identifiers
     # @param [Integer] timeout For streaming connection
-    def get_streaming_events(subscription_ids, timeout)
-      puts "Im in Viewpoint get_streaming_events with subscription ids: #{subscription_ids.count} ids, Timeout: #{timeout}, Time: #{Time.now}"
-      Rails.logger.info "Im in get_streaming_events with subscription ids: #{subscription_ids.count} ids, Timeout: #{timeout}, Time: #{Time.now}" rescue nil
+    # This is the entry point
+    def get_streaming_events(subscription_ids, timeout, group_name: "not_set")
+      Rails.logger.info "[#{group_name}] ---- {Debugger 3 -- #{Time.now}} In Viewpoint 'get_streaming_events' number of ids: #{subscription_ids.count}, Timeout set to: #{timeout}" rescue nil
       req = build_soap! do |type, builder|
-        puts "Im in Viewpoint get_streaming_events in the build_soap! block with subscription ids: #{subscription_ids.count}, Timeout: #{timeout}, Time: #{Time.now}"
-        Rails.logger.info "Im in get_streaming_events in the build_soap! block with subscription ids: #{subscription_ids.count} ids, Timeout: #{timeout}, Time: #{Time.now}" rescue nil
+        Rails.logger.info "[#{group_name}] ---- {Debugger 4 -- #{Time.now}} Im in get_streaming_events in the build_soap! block with subscription ids: #{subscription_ids.count} ids, Timeout set to: #{timeout}" rescue nil
         if(type == :header)
         else
           builder.nbuild[NS_EWS_MESSAGES].GetStreamingEvents do
-            puts "Im in Viewpoint get_streaming_events in the build_soap! block in the nbuild[NS_EWS_MESSAGES].GetStreamingEvents block with subscription ids: #{subscription_ids.count}, Timeout: #{timeout}, Time: #{Time.now}"
-            Rails.logger.info "Im in Viewpoint get_streaming_events in the build_soap! block in the nbuild[NS_EWS_MESSAGES].GetStreamingEvents block with subscription ids: #{subscription_ids.count} ids, Timeout: #{timeout}, Time: #{Time.now}" rescue nil
-
+            Rails.logger.info "[#{group_name}] ---- {Debugger 5 -- #{Time.now}} Im in Viewpoint get_streaming_events in the build_soap! block in the nbuild[NS_EWS_MESSAGES].GetStreamingEvents block with subscription ids: #{subscription_ids.count} ids, Timeout: #{timeout}" rescue nil
             builder.subscription_ids!(subscription_ids)
             builder.connection_timeout!(timeout)
           end
         end
       end
-
-      puts "Im in Viewpoint get_streaming_events build soap ended with subscription ids: #{subscription_ids.count}, Timeout: #{timeout}, req: #{req}, Time: #{Time.now}"
-      Rails.logger.info "Im in Viewpoint get_streaming_events in the build_soap! block in the nbuild[NS_EWS_MESSAGES].GetStreamingEvents block with subscription ids: #{subscription_ids.count} ids, Timeout: #{timeout}, req: #{req}, Time: #{Time.now}" rescue nil
+      Rails.logger.info "[#{group_name}] ---- {Debugger 6 -- #{Time.now}} Im in Viewpoint get_streaming_events. Finished building soap block!, request is: #{req}, Timeout: #{timeout} " rescue nil
 
       # TODO: Once do_soap_request_async support raw_response, returns GetStreamingEventResponse results
-
-      puts "Im in Viewpoint get_streaming_events about to call do_soap_request_async"
-      Rails.logger.info "Im in Viewpoint get_streaming_events about to call do_soap_request_async" rescue nil
+      Rails.logger.info "[#{group_name}] ---- {Debugger 7 -- #{Time.now}} Im in Viewpoint get_streaming_events about to call do_soap_request_async" rescue nil
       do_soap_request_async(req, raw_response: true)
     end
 
