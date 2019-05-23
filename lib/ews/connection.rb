@@ -114,8 +114,10 @@ class Viewpoint::EWS::Connection
   # @param soapmsg [String]
   # @param opts [Hash] misc opts for handling the Response
   def dispatch_async(ews, soapmsg, opts, group_name: "not_set")
+    puts "[#{group_name}] ---- {Debugger 10 -- #{Time.now}} Im in Viewpoint get_streaming_events inside call do_soap_request_async about to call connection.dispatch_async"
     Rails.logger.info "[#{group_name}] ---- {Debugger 10 -- #{Time.now}} Im in Viewpoint get_streaming_events inside call do_soap_request_async about to call connection.dispatch_async" rescue nil
     streaming_connection = post_async(soapmsg)
+    puts "[#{group_name}] ---- {Debugger 11 -- #{Time.now}} Im in Viewpoint dispatch_async about to call post_async finished"
     Rails.logger.info "[#{group_name}] ---- {Debugger 11 -- #{Time.now}} Im in Viewpoint dispatch_async about to call post_async finished" rescue nil
     if opts[:raw_response]
       streaming_connection # Returns the HTTPClient::Connection instance as a result
