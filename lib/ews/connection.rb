@@ -23,7 +23,7 @@ class Viewpoint::EWS::Connection
   include Viewpoint::EWS
 
   # This class returns both raw http response which is used to get cookies for grouping subscription
-  EWSHttpResponse = Struct.new(:headers, :viewpoint_response)
+  EWSHttpResponse = Struct.new(:headers, :cookies, :viewpoint_response)
 
   attr_accessor :logger, :user_agent
 
@@ -87,7 +87,7 @@ class Viewpoint::EWS::Connection
   def dispatch(ews, soapmsg, opts)
     respmsg = post(soapmsg, options: opts)
 
-    respmsg, resp_headers = respmsg if respmsg.is_a?(Array)
+    respmsg, resp_headers, cookies = respmsg if respmsg.is_a?(Array)
 
     # This is kinda hack to use Nokogiri formatting xml to avoid invalid xml element or special characters
     valid_xml = Nokogiri::XML(respmsg).to_xml
@@ -101,7 +101,7 @@ class Viewpoint::EWS::Connection
 
     # Returning raw http response in order to get Exchange cookie in header
     if opts[:include_http_headers]
-      EWSHttpResponse.new(resp_headers, ews.parse_soap_response(valid_xml, opts))
+      EWSHttpResponse.new(resp_headers, cookies, ews.parse_soap_response(valid_xml, opts))
     else
       opts[:raw_response] ? respmsg : ews.parse_soap_response(valid_xml, opts)
     end
@@ -216,6 +216,7 @@ class Viewpoint::EWS::Connection
 
   def check_response(resp, include_http_headers: false, request_body: nil, options: {})
     @log.debug("Got HTTP response with headers: #{resp.headers}")
+    @log.debug("Got the following 'Set-Cookie' Values #{resp.header['Set-Cookie']}")
     @log.debug("Got HTTP response with body: #{resp.body}") if resp.body
 
     log msg: "Received a **#{resp.status}** response for request of type: **#{options[:request_type]}** with uniq id: **#{options[:uniq_id]}** with body: #{resp.body}"
@@ -223,7 +224,7 @@ class Viewpoint::EWS::Connection
     case resp.status
     when 200
       if include_http_headers
-        return resp.body, resp.headers
+        return resp.body, resp.headers, resp.header['Set-Cookie']
       else
         return resp.body
       end
