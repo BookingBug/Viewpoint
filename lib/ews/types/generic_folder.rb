@@ -47,7 +47,7 @@ module Viewpoint::EWS::Types
       :ckey   => :change_key,
     }
 
-    attr_accessor :subscription_id, :watermark, :sync_state, :last_request_return_headers
+    attr_accessor :subscription_id, :watermark, :sync_state, :last_request_return_headers, :cookies
 
     # @param [SOAP::ExchangeWebService] ews the EWS reference
     # @param [Hash] ews_item the EWS parsed response document
@@ -283,6 +283,7 @@ module Viewpoint::EWS::Types
       full_response = ews.stream_subscribe_folder(folder, event_types, timeout, watermark, options: options.merge({include_http_headers: true}))
       resp = full_response.viewpoint_response
       headers = full_response.headers
+      cookies = full_response.cookies
 
       rmsg = resp.response_messages.first
 
@@ -290,6 +291,7 @@ module Viewpoint::EWS::Types
         @subscription_id = rmsg.subscription_id
         @watermark = rmsg.watermark # This returns always nil for streaming subscription
         @last_request_return_headers = headers
+        @cookies = cookies
 
         true
       else
