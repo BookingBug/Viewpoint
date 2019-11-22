@@ -7,7 +7,7 @@ describe Viewpoint::EWS::Connection do
   let(:prefer_server_affinity) { true }
   let(:backend_override_cookie) { "cookie" }
   let(:customisable_headers) { { anchor_mailbox: anchor_mailbox, prefer_server_affinity: prefer_server_affinity } }
-  let(:customisable_cookies) { { backend_override_cookie: backend_override_cookie } }
+  let(:customisable_cookies) { [{ backend_override_cookie: backend_override_cookie }] }
 
   describe "#post" do
     let(:options) { {} }
@@ -51,6 +51,56 @@ describe Viewpoint::EWS::Connection do
         expect(SecureRandom).to receive(:uuid).and_return("test")
         expect(connection.instance_variable_get(:@httpcli)).to receive(:post)
           .with(endpoint, xmldoc, expected_headers)
+
+        subject
+      end
+
+      it "doesn't set additional cookies" do
+        expect(connection).not_to receive(:set_custom_http_cookies)
+
+        subject
+      end
+    end
+  end
+
+  describe '#post_async' do
+    let(:options) { {} }
+    let(:xmldoc) { double(:xmldoc) }
+
+    subject { connection.post_async(xmldoc, opts: options) }
+
+    context "when customisable headers are passed in" do
+      let(:options) { { customisable_headers: customisable_headers } }
+      let(:expected_headers) { {'Content-Type' => 'text/xml', 'Return-Client-Request-Id' => 'true', 'Send-Client-Latencies' => 'true', 'Client-Request-Id' => 'test', 'User-Agent' => 'Viewpoint EWS'}.merge!(customisable_headers) }
+
+      it "merges the custom HTTP headers to the existing headers" do
+        expect(SecureRandom).to receive(:uuid).and_return("test")
+        expect(connection).to receive(:custom_http_headers) { customisable_headers }
+        expect(connection.instance_variable_get(:@httpcli)).to receive(:post_async)
+                                                                   .with(endpoint, xmldoc, expected_headers, request_body: xmldoc)
+
+        subject
+      end
+    end
+
+    context "when customisable cookies are passed in" do
+      let(:options) { { customisable_cookies: customisable_cookies } }
+
+      it "sets the custom HTTP cookies" do
+        expect(connection).to receive(:set_custom_http_cookies).with(customisable_cookies)
+
+        subject
+      end
+    end
+
+    context "when no customisable cookies are passed in" do
+      let(:expected_headers) { {'Content-Type' => 'text/xml', 'Return-Client-Request-Id' => 'true', 'Send-Client-Latencies' => 'true','Client-Request-Id' => 'test', 'User-Agent' => 'Viewpoint EWS'} }
+
+      it "sets only the default headers" do
+        expect(connection).not_to receive(:custom_http_headers)
+        expect(SecureRandom).to receive(:uuid).and_return("test")
+        expect(connection.instance_variable_get(:@httpcli)).to receive(:post_async)
+                                                                   .with(endpoint, xmldoc, expected_headers, request_body: xmldoc)
 
         subject
       end
