@@ -178,14 +178,12 @@ class Viewpoint::EWS::Connection
   end
 
   def set_custom_http_cookies(cookies)
-    Viewpoint::EWS::SOAP::CUSTOMISABLE_HTTP_COOKIES.each do |cookie_key, cookie_name|
-      if cookies.include?(cookie_key)
-        cookie = WebAgent::Cookie.new
-        cookie.name = cookie_name
-        cookie.value = cookies[cookie_key]
-        cookie.url = URI(endpoint)
-        @httpcli.cookie_manager.add(cookie)
-      end
+    cookies.each do |cookie|
+      new_cookie = WebAgent::Cookie.new
+      new_cookie.name = cookie[:name]
+      new_cookie.value = cookie[:value]
+      new_cookie.url = endpoint
+      @httpcli.cookie_manager.add(new_cookie)
     end
   end
 
@@ -207,6 +205,7 @@ class Viewpoint::EWS::Connection
     }
 
     headers.merge!(custom_http_headers(opts[:customisable_headers])) if opts[:customisable_headers]
+    set_custom_http_cookies(opts[:customisable_cookies]) if opts[:customisable_cookies]
 
     @httpcli.post_async(@endpoint, xmldoc, headers, request_body: xmldoc)
   end
