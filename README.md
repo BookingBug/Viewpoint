@@ -16,6 +16,9 @@ Find me on irc.freenode.net in #ruby-lang (zenChild)
 
 # Features
 
+## Version 1.2.16
+1. Now set the custom cookies when calling the get streaming events call, allow cookies to be other than just `X-BackendOverrideCookie`
+
 ## Version 1.2.15
 1. The folder will now response to .cookies which returns all cookies returned in the Set-Cookie header
 
