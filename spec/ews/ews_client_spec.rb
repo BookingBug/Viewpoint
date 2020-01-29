@@ -1,6 +1,21 @@
 require "spec_helper"
 
 describe Viewpoint::EWSClient do
+  describe "#initalize" do
+    context "without authorization_token" do
+      it "sets username/password auth" do
+        allow_any_instance_of(Viewpoint::EWS::Connection).to receive(:set_auth).with("test_username", "test_password")
+        described_class.new "http://www.example.com", "test_username", "test_password"
+      end
+    end
+
+    context "with authorization_token" do
+      it "sets token auth" do
+        allow_any_instance_of(Viewpoint::EWS::Connection).to receive(:authorization_token).with("test_authorization_token")
+        described_class.new "http://www.example.com", "", "", authorization_token: "test_authorization_token"
+      end
+    end
+  end
 
   describe "#set_auto_deepen" do
     let(:client) { described_class.new "http://www.example.com", "test", "test" }

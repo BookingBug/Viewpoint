@@ -66,7 +66,8 @@ module Viewpoint
 
       CUSTOMISABLE_HTTP_HEADERS = {
         anchor_mailbox: "X-AnchorMailbox",
-        prefer_server_affinity: "X-PreferServerAffinity"
+        prefer_server_affinity: "X-PreferServerAffinity",
+        authorization: "Authorization"
       }.freeze
       CUSTOMISABLE_HTTP_COOKIES = {
         backend_override_cookie: "X-BackEndOverrideCookie"

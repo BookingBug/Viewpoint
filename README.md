@@ -16,98 +16,6 @@ Find me on irc.freenode.net in #ruby-lang (zenChild)
 
 # Features
 
-## Version 1.2.16
-1. Now set the custom cookies when calling the get streaming events call, allow cookies to be other than just `X-BackendOverrideCookie`
-
-## Version 1.2.15
-1. The folder will now response to .cookies which returns all cookies returned in the Set-Cookie header
-
-## Version 1.2.14
-1. Fixed a bug where there was an unknown method 
-
-## Version 1.2.13
-1. Fixed a bug where an erroneous log statement was placed.
-
-## Version 1.2.12
-1. Implemented ability to pass custom headers for the get streaming events call
-
-## Version 1.2.11
-1. Implemented new headers for Exchange 2016
-2. Implemented a way to pass a customer logger when initializing the gem
-3. Added log statements before and after making the request to Exchange with the uniq id of the request
-
-## Version 1.2.10
-1. Implemented ErrorExceededFindCountLimit to handle an issue with find_items_between returning ErrorExceededFindCountLimit error
-
-## Version 1.2.9
-1. Fixed an issue with XML string contains special charter or invalid elements fails the parsing response
-
-## Version 1.2.8
-1. Fixed an issue with too many arguments being passed to the recurring_master_item_id! method in the ews builder
-
-## Version 1.2.7
-1. Fixed an issue with too many arguments being passed to the occurrence_item_id! method in the ews builder
-
-## Version 1.2.6
-1. Fixed an issue where there was a duplication of methods in the soap builder
-
-## Version 1.2.5
-1. Fix an error where the only the first notification in a streaming response's envelope was processed
-
-## Version 1.2.4
-1. Fix variable name error
-
-## Version 1.2.3
-1. Add support for QueryString (special thank to @Fishy49 https://github.com/Fishy49)
-2. Include request body in all error classes for better error handling
-
-## Version 1.2.2
-1. Raise `TooManyRequestsError` if HTTP response has error code 429
-
-## Version 1.2.1
-1. Enhance response for recurring master so we can get ids for all its occurrence item ids in GetItem response
-2. Bug fixed: Generate correct XML body when updating attendees to build proper SOAP request in order to update attendees of a calendar item
-3. Removed: Unsupported Ruby Versions from Travis CI
-
-## Version 1.2.0
-1. Bug fixed: Use correct body_type when updating a calendar item
-
-## Version 1.1.9 
-1. Add SendClientLatencies and ReturnClientRequestId headers
-
-## Version 1.1.8 
-1. Support raw HTTP header return from #streaming_subscribe
-2. Fixed failing rspec
-
-## Version 1.1.7 
-1. Bug fixed for #streaming_subscribe
-
-## Version 1.1.6 
-1. Fix typo
-
-## Version 1.1.5 
-1. Adding RequestedServerVersion to AutoDiscover #get_user_settings request
-
-## Version 1.1.4 
-1. Supports [Exchange Server Affinity](https://docs.microsoft.com/en-us/exchange/client-developer/exchange-web-services/how-to-maintain-affinity-between-group-of-subscriptions-and-mailbox-server#how-do-i-maintain-affinity-by-using-the-ews-managed-api-or-ews)
-
-## Version 1.1.3
-1. Supports standard AutoDiscover endpoint
-2. Supports customisable http header and cookie in order to support Grouping Subscriptions
-
-## Version 1.1.2
-1. Enhance `EwsSoapGetStreamingEventsResponse#error_subscription_ids` to return error_subscription_ids array if any
-
-## Version 1.1.1
-Mostly minor bug fix and enhancements
-
-#### Enhancements
-1. Make the streaming subscription default timeout to 240 minutes  (same with pull subscription)
-2. Use `#streaming_subscribed?` for checking if a streaming subscription is set up
-
-#### Bug fixed
-1. `CalendarFolder#items_between` and `GenericFolder#items_between` now truly support option params
- 
 ## New in 1.1.0
 
 * Partially supporting Streaming Notification
@@ -141,7 +49,7 @@ out of the picture this is no longer required. Go crazy ;)
 ## Enhanced in 1.0
 
 * *Delegate access is supported*
-  One thing that was often asked for, but missing from the previous version was delegate access to mailboxes and calendars.  This is now supported via the 'act_as' parameter to the GenericFolder::get_folder method. 
+  One thing that was often asked for, but missing from the previous version was delegate access to mailboxes and calendars.  This is now supported via the 'act_as' parameter to the GenericFolder::get_folder method.
 
 >> Inbox example:
   ```ofolder = Folder.get_folder(:inbox, opts = {act_as: "user@host.com"})```
@@ -155,9 +63,8 @@ out of the picture this is no longer required. Go crazy ;)
 
 
 * There is also some support for manipulation of delegate access itself via
-  the methods MailboxUser#add_delegate!, MailboxUser#update_delegate!, and 
+  the methods MailboxUser#add_delegate!, MailboxUser#update_delegate!, and
   MailboxUser#get_delegate_info.
-
 
 # Using Viewpoint
 
@@ -184,6 +91,17 @@ There are also various options you can pass to EWSClient.
 If you are testing in an environment using a self-signed certificate you can pass a connection parameter to ignore SSL verification by passing `http_opts: {ssl_verify_mode: 0}`.
 
 If you want to target a specific version of Exchange you can pass `server_version: SOAP::ExchangeWebService::VERSION_2010_SP1`. You really shouldn't have to use this unless you know why. If you are interacting with servers which you do not know the version(s) of, an incorrect version may manifest as a `SoapResponseError` or a HTTP 400 `ResponseError`. Note that different versions are particular; for example, `VERSION_2007` may not work against a `VERSION_2007_SP1` system.
+
+## Authenticating using authorization tokens
+
+When passing an `authorization_token` value to the `Viewpoint::EWSClient` constructor via the options hash, it will ignore the username and password and add the token to the authorization header.
+
+```ruby
+endpoint = 'https://example.com/ews/Exchange.asmx'
+authorization_token = 'jkhbHJBjkhb...'
+
+cli = Viewpoint::EWSClient.new(endpoint, '', '', authorization_token: authorization_token)
+```
 
 ## Accessors
 

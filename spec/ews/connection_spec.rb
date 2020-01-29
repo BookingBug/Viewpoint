@@ -61,6 +61,31 @@ describe Viewpoint::EWS::Connection do
         subject
       end
     end
+
+    context "with an authorization_token instance variable" do
+      before do
+        connection.authorization_token = "test_authorization_token"
+      end
+
+      let(:expected_headers) do
+        {
+          'Content-Type' => 'text/xml',
+          'Return-Client-Request-Id' => 'true',
+          'Send-Client-Latencies' => 'true',
+          'Client-Request-Id' => 'test',
+          'User-Agent' => 'Viewpoint EWS',
+          'Authorization' => 'Bearer test_authorization_token'
+        }
+      end
+
+      it "adds the Authorization value to the header" do
+        expect(SecureRandom).to receive(:uuid).and_return("test")
+        expect(connection.instance_variable_get(:@httpcli)).to receive(:post)
+          .with(endpoint, xmldoc, expected_headers)
+
+        subject
+      end
+    end
   end
 
   describe '#post_async' do
@@ -107,6 +132,31 @@ describe Viewpoint::EWS::Connection do
 
       it "doesn't set additional cookies" do
         expect(connection).not_to receive(:set_custom_http_cookies)
+
+        subject
+      end
+    end
+
+    context "with an authorization_token instance variable" do
+      before do
+        connection.authorization_token = "test_authorization_token"
+      end
+
+      let(:expected_headers) do
+        {
+          'Content-Type' => 'text/xml',
+          'Return-Client-Request-Id' => 'true',
+          'Send-Client-Latencies' => 'true',
+          'Client-Request-Id' => 'test',
+          'User-Agent' => 'Viewpoint EWS',
+          'Authorization' => 'Bearer test_authorization_token'
+        }
+      end
+
+      it "adds the Authorization value to the header" do
+        expect(SecureRandom).to receive(:uuid).and_return("test")
+        expect(connection.instance_variable_get(:@httpcli)).to receive(:post_async)
+          .with(endpoint, xmldoc, expected_headers, request_body: xmldoc)
 
         subject
       end
