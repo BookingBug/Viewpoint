@@ -25,9 +25,9 @@ class Viewpoint::EWS::Connection
   # This class returns both raw http response which is used to get cookies for grouping subscription
   EWSHttpResponse = Struct.new(:headers, :cookies, :viewpoint_response)
 
-  attr_accessor :logger, :user_agent
+  attr_accessor :logger, :user_agent, :authorization_token
+  attr_reader :endpoint, :hostname
 
-  attr_reader :endpoint, :hostname, :logger, :user_agent
   # @param [String] endpoint the URL of the web service.
   #   @example https://<site>/ews/Exchange.asmx
   # @param [Hash] opts Misc config options (mostly for development)
@@ -59,8 +59,8 @@ class Viewpoint::EWS::Connection
     @endpoint = endpoint
   end
 
-  def set_auth(user,pass)
-    @httpcli.set_auth(@endpoint.to_s, user, pass)
+  def set_auth(user, pass)
+    @httpcli.set_auth(@endpoint.to_s, user, pass) unless @authorization_token
   end
 
   # Authenticate to the web service. You don't have to do this because
@@ -151,14 +151,15 @@ class Viewpoint::EWS::Connection
     log msg: "Making request for **#{options[:request_type]}** with uniq id of: **#{options[:uniq_id]}** with body: #{xmldoc.to_s.gsub(/\s+/, ' ')}"
 
     headers = {
-        'Content-Type' => 'text/xml',
-        'Return-Client-Request-Id' => 'true',
-        'Send-Client-Latencies' => 'true',
-        'Client-Request-Id' => options[:uniq_id],
-        'User-Agent' => @user_agent || 'Viewpoint EWS'
+      'Content-Type' => 'text/xml',
+      'Return-Client-Request-Id' => 'true',
+      'Send-Client-Latencies' => 'true',
+      'Client-Request-Id' => options[:uniq_id],
+      'User-Agent' => @user_agent || 'Viewpoint EWS'
     }
 
     headers.merge!(custom_http_headers(options[:customisable_headers])) if options[:customisable_headers]
+    headers.merge!(custom_http_headers(authorization: "Bearer #{@authorization_token}")) if @authorization_token
     set_custom_http_cookies(options[:customisable_cookies]) if options[:customisable_cookies]
 
     raw_http_response = @httpcli.post(@endpoint, xmldoc, headers)
@@ -167,11 +168,10 @@ class Viewpoint::EWS::Connection
   end
 
   def custom_http_headers(headers)
-    custom_headers = Viewpoint::EWS::SOAP::CUSTOMISABLE_HTTP_HEADERS.inject({}) do |header_hash, (header_key, header_name)|
+    custom_headers = Viewpoint::EWS::SOAP::CUSTOMISABLE_HTTP_HEADERS.each_with_object({}) do |(header_key, header_name), header_hash|
       if headers.include?(header_key)
         header_hash[header_name] = headers[header_key]
       end
-      header_hash
     end
 
     custom_headers || {}
@@ -197,14 +197,15 @@ class Viewpoint::EWS::Connection
     log msg: "Making ASYNC POST request for #{opts[:request_type]} with uniq id of: #{opts[:uniq_id]}, with body: #{xmldoc.to_s.gsub(/\s+/, ' ')}"
 
     headers = {
-        'Content-Type' => 'text/xml',
-        'Return-Client-Request-Id' => 'true',
-        'Send-Client-Latencies' => 'true',
-        'Client-Request-Id' => opts[:uniq_id],
-        'User-Agent' => @user_agent || 'Viewpoint EWS'
+      'Content-Type' => 'text/xml',
+      'Return-Client-Request-Id' => 'true',
+      'Send-Client-Latencies' => 'true',
+      'Client-Request-Id' => opts[:uniq_id],
+      'User-Agent' => @user_agent || 'Viewpoint EWS'
     }
 
     headers.merge!(custom_http_headers(opts[:customisable_headers])) if opts[:customisable_headers]
+    headers.merge!(custom_http_headers(authorization: "Bearer #{@authorization_token}")) if @authorization_token
     set_custom_http_cookies(opts[:customisable_cookies]) if opts[:customisable_cookies]
 
     @httpcli.post_async(@endpoint, xmldoc, headers, request_body: xmldoc)
@@ -223,9 +224,9 @@ class Viewpoint::EWS::Connection
     case resp.status
     when 200
       if include_http_headers
-        return resp.body, resp.headers, resp.header['Set-Cookie']
+        [resp.body, resp.headers, resp.header['Set-Cookie']]
       else
-        return resp.body
+        resp.body
       end
     when 302
       # @todo redirect
