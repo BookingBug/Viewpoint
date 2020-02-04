@@ -12,7 +12,7 @@ describe Viewpoint::EWSClient do
     context "with authorization_token" do
       it "sets token auth" do
         allow_any_instance_of(Viewpoint::EWS::Connection).to receive(:authorization_token).with("test_authorization_token")
-        described_class.new "http://www.example.com", "", "", authorization_token: "test_authorization_token"
+        described_class.new "http://www.example.com", nil, nil, authorization_token: "test_authorization_token"
       end
     end
   end

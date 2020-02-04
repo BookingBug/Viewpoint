@@ -1,14 +1,17 @@
+require 'simplecov'
+SimpleCov.start 'rails'
+
 $: << File.dirname(__FILE__) + '/../lib/'
 require 'viewpoint'
 require 'viewpoint/logging/config'
 require 'ostruct'
-require 'turn/autorun'
 require_relative 'xml_matcher'
 
 RSpec.configure do |c|
+  c.mock_with :rspec do |mocks|
+    mocks.yield_receiver_to_any_instance_implementation_blocks = true
+  end
 end
-
-Turn.config.format = :outline
 
 module SpecHelper
   def specdir
