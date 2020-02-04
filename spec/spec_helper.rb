@@ -1,5 +1,5 @@
 require 'simplecov'
-SimpleCov.start 'rails'
+SimpleCov.start
 
 $: << File.dirname(__FILE__) + '/../lib/'
 require 'viewpoint'
