@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.summary = 'A Ruby client access library for Microsoft Exchange Web Services (EWS)'
   s.description = 'A Ruby client access library for Microsoft Exchange Web Services (EWS).  Examples can be found here: http://distributed-frostbite.blogspot.com'
 
-  s.required_ruby_version = '>= 1.9.1'
+  s.required_ruby_version = '>= 2.3.0'
 
   s.author = 'Dan Wanek'
   s.email = 'dan.wanek@gmail.com'

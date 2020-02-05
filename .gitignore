@@ -7,3 +7,6 @@ Gemfile.lock
 .idea
 tmp
 vendor
+coverage
+settings.json
+.ruby-version
