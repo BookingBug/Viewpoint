@@ -41,8 +41,8 @@ class Viewpoint::EWSClient
   def initialize(endpoint, username, password, opts = {})
     # dup all. @see ticket https://github.com/zenchild/Viewpoint/issues/68
     @endpoint = endpoint.dup
-    @username = username.dup
-    password  = password.dup
+    @username = username&.dup
+    password  = password&.dup
     opts      = opts.dup
     http_klass = opts[:http_class] || Viewpoint::EWS::Connection
     con = http_klass.new(endpoint, opts[:http_opts] || {})
