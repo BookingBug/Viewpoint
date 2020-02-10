@@ -25,12 +25,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Option to authenticate via OAuth passing an `Authorization` value to the HTTPClient header
 
-## [1.2.17]
-
-### Changed
-
-- Now set the custom cookies when calling the get streaming events call, allow cookies to be other than just `X-BackendOverrideCookie`
-
 ## [1.2.16]
 
 ### Changed
