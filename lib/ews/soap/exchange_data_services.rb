@@ -52,8 +52,10 @@ module Viewpoint::EWS::SOAP
       end
       options = {
           request_type: 'Find Item',
-          response_class: EwsResponse
+          response_class: EwsResponse,
+          customisable_headers: get_customisable_headers(opts)
       }
+
       do_soap_request(req, options)
     end
 
@@ -91,8 +93,10 @@ module Viewpoint::EWS::SOAP
       end
       options = {
           request_type: 'Get Item',
-          response_class: EwsResponse
+          response_class: EwsResponse,
+          customisable_headers: get_customisable_headers(opts)
       }
+
       do_soap_request(req, options)
     end
 
@@ -158,8 +162,10 @@ module Viewpoint::EWS::SOAP
       end
       options = {
           request_type: 'Create Item',
-          response_class: EwsResponse
+          response_class: EwsResponse,
+          customisable_headers: get_customisable_headers(opts)
       }
+
       do_soap_request(req, options)
     end
 
@@ -215,8 +221,10 @@ module Viewpoint::EWS::SOAP
       end
       options = {
           request_type: 'Update Item',
-          response_class: EwsResponse
+          response_class: EwsResponse,
+          customisable_headers: get_customisable_headers(opts)
       }
+
       do_soap_request(req, options)
     end
 
@@ -260,8 +268,10 @@ module Viewpoint::EWS::SOAP
       end
       options = {
           request_type: 'Delete Item',
-          response_class: EwsResponse
+          response_class: EwsResponse,
+          customisable_headers: get_customisable_headers(opts)
       }
+
       do_soap_request(req, options)
     end
 
@@ -305,8 +315,10 @@ module Viewpoint::EWS::SOAP
       end
       options = {
           request_type: 'Move Item',
-          response_class: EwsResponse
+          response_class: EwsResponse,
+          customisable_headers: get_customisable_headers(opts)
       }
+
       do_soap_request(req, options)
     end
 
@@ -350,8 +362,10 @@ module Viewpoint::EWS::SOAP
       end
       options = {
           request_type: 'Copy Item',
-          response_class: EwsResponse
+          response_class: EwsResponse,
+          customisable_headers: get_customisable_headers(opts)
       }
+
       do_soap_request(req, options)
     end
 
@@ -393,8 +407,10 @@ module Viewpoint::EWS::SOAP
       end
       options = {
           request_type: 'Send Item',
-          response_class: EwsResponse
+          response_class: EwsResponse,
+          customisable_headers: get_customisable_headers(opts)
       }
+
       do_soap_request(req, options)
     end
 
@@ -418,8 +434,10 @@ module Viewpoint::EWS::SOAP
       end
       options = {
           request_type: 'Export Items',
-          response_class: EwsResponse
+          response_class: EwsResponse,
+          customisable_headers: get_customisable_headers(opts)
       }
+
       do_soap_request(req, options)
     end
 
@@ -453,8 +471,10 @@ module Viewpoint::EWS::SOAP
         end
       end
       options = {
-          request_type: 'Create Folder'
+        request_type: 'Create Folder',
+        customisable_headers: get_customisable_headers(opts)
       }
+
       do_soap_request(req, options)
     end
 
@@ -479,6 +499,7 @@ module Viewpoint::EWS::SOAP
       options = {
           request_type: 'Copy Folder'
       }
+
       do_soap_request(req, options)
     end
 
@@ -505,8 +526,10 @@ module Viewpoint::EWS::SOAP
         end
       end
       options = {
-          request_type: 'Delete Folder'
+          request_type: 'Delete Folder',
+          customisable_headers: get_customisable_headers(opts)
       }
+
       do_soap_request(req, options)
     end
 
@@ -547,8 +570,10 @@ module Viewpoint::EWS::SOAP
         end
       end
       options = {
-          request_type: 'Find Folder'
+          request_type: 'Find Folder',
+          customisable_headers: get_customisable_headers(opts)
       }
+
       do_soap_request(req, options)
     end
 
@@ -570,6 +595,7 @@ module Viewpoint::EWS::SOAP
     #     :folder_shape => {:base_shape => 'Default'} }
     def get_folder(opts)
       opts = opts.clone
+
       [:folder_ids, :folder_shape].each do |k|
         validate_param(opts, k, true)
       end
@@ -584,9 +610,12 @@ module Viewpoint::EWS::SOAP
           }
         end
       end
+
       options = {
-          request_type: 'Find Folder'
+          request_type: 'Find Folder',
+          customisable_headers: get_customisable_headers(opts)
       }
+
       do_soap_request(req, options)
     end
 
@@ -642,6 +671,7 @@ module Viewpoint::EWS::SOAP
       options = {
           request_type: 'Update Folder'
       }
+
       do_soap_request(req, options)
     end
 
@@ -673,8 +703,10 @@ module Viewpoint::EWS::SOAP
         end
       end
       options = {
-          request_type: 'Empty Folder'
+          request_type: 'Empty Folder',
+          customisable_headers: get_customisable_headers(opts)
       }
+
       do_soap_request(req, options)
     end
 
@@ -704,8 +736,10 @@ module Viewpoint::EWS::SOAP
         end
       end
       options = {
-          request_type: 'Get Attachment'
+          request_type: 'Get Attachment',
+          customisable_headers: get_customisable_headers(opts)
       }
+
       do_soap_request(req, options)
     end
 
@@ -748,8 +782,10 @@ module Viewpoint::EWS::SOAP
       end
       options = {
           request_type: 'Create Attachment',
-          response_class: EwsResponse
+          response_class: EwsResponse,
+          customisable_headers: get_customisable_headers(opts)
       }
+
       do_soap_request(req, options)
     end
 
@@ -782,8 +818,10 @@ module Viewpoint::EWS::SOAP
         end
       end
       options = {
-          request_type: 'Expand Distribution List'
+          request_type: 'Expand Distribution List',
+          customisable_headers: get_customisable_headers(opts)
       }
+
       do_soap_request(req, options)
     end
 
@@ -816,8 +854,10 @@ module Viewpoint::EWS::SOAP
         end
       end
       options = {
-          request_type: 'Resolve Names'
+          request_type: 'Resolve Names',
+          customisable_headers: get_customisable_headers(opts)
       }
+
       do_soap_request(req, options)
     end
 
@@ -849,10 +889,11 @@ module Viewpoint::EWS::SOAP
       end
       options = {
           request_type: 'Convert Ids',
-          response_class: EwsResponse
+          response_class: EwsResponse,
+          customisable_headers: get_customisable_headers(opts)
       }
+
       do_soap_request(req, options)
     end
-
   end #ExchangeDataServices
 end

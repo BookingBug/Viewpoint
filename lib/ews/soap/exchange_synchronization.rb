@@ -46,7 +46,13 @@ module Viewpoint::EWS::SOAP
           }
         end
       end
-      do_soap_request(req, response_class: EwsResponse)
+
+      options = {
+        response_class: EwsResponse,
+        customisable_headers: get_customisable_headers(opts)
+      }
+
+      do_soap_request(req, options)
     end
 
     # Synchronizes items between the Exchange server and the client
@@ -86,7 +92,13 @@ module Viewpoint::EWS::SOAP
           }
         end
       end
-      do_soap_request(req, response_class: EwsResponse)
+
+      options = {
+        response_class: EwsResponse,
+        customisable_headers: get_customisable_headers(opts)
+      }
+
+      do_soap_request(req, options)
     end
 
   end #ExchangeSynchronization

@@ -15,10 +15,10 @@ Gem::Specification.new do |s|
 
   s.author = 'Dan Wanek'
   s.email = 'dan.wanek@gmail.com'
-  s.homepage = 'http://github.com/zenchild/Viewpoint'
+  s.homepage = 'https://github.com/BookingBug/Viewpoint'
   s.rubyforge_project = nil
 
-  s.files = Dir['Changelog.txt', 'README.md', 'TODO', 'lib/**/*']
+  s.files = Dir['Changelog.txt','CHANGELOG.md', 'README.md', 'TODO', 'lib/**/*']
   s.require_path = 'lib'
   s.rdoc_options = %w(-x test/ -x examples/)
   s.extra_rdoc_files = %w(README.md)

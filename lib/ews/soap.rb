@@ -78,6 +78,14 @@ module Viewpoint
         @default_ns = NAMESPACES["xmlns:#{NS_EWS_MESSAGES}"]
       end
 
+      def get_customisable_headers(options)
+        (options[:customisable_headers]||{}).reject { |option, _| !CUSTOMISABLE_HTTP_HEADERS.include?(option) }
+      end
+
+      def get_customisable_cookies(options)
+        (options[:customisable_cookies]||{}).reject { |option, _| !CUSTOMISABLE_HTTP_COOKIES.include?(option) }
+      end
+
     end # SOAP
   end # EWS
 end # Viewpoint

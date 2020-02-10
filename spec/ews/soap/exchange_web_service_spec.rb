@@ -23,7 +23,8 @@ describe Viewpoint::EWS::SOAP::ExchangeWebService do
       ).and_return(soap_double)
       expect(ews_instance).to receive(:do_soap_request).with(soap_double, {
         response_class: Viewpoint::EWS::SOAP::EwsSoapGetUserSettingsResponse,
-        request_type: 'Get User Settings'
+        request_type: 'Get User Settings',
+        customisable_headers: {}
         }
       )
 

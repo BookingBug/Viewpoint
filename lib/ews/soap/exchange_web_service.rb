@@ -182,8 +182,10 @@ module Viewpoint::EWS::SOAP
       req = EwsBuilder.new.build_get_user_settings_soap(opts)
       options = {
           request_type: 'Get User Settings',
-          response_class: EwsSoapGetUserSettingsResponse
+          response_class: EwsSoapGetUserSettingsResponse,
+          customisable_headers: get_customisable_headers(opts)
       }
+
       do_soap_request(req, options)
     end
 

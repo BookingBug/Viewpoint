@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.19] - 2020-02-10
+
+### Changed
+
+- All request will have the `X-AnchorMailbox` value in the header
+
 ## [1.2.18] - 2020-02-04
 
 ### Changed
@@ -18,12 +24,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Option to authenticate via OAuth passing an `Authorization` value to the HTTPClient header
-
-## [1.2.17]
-
-### Changed
-
-- Now set the custom cookies when calling the get streaming events call, allow cookies to be other than just `X-BackendOverrideCookie`
 
 ## [1.2.16]
 
