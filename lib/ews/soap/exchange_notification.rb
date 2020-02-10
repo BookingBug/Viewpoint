@@ -76,14 +76,6 @@ module Viewpoint::EWS::SOAP
       do_soap_request(req, opts)
     end
 
-    def get_customisable_headers(options)
-      (options[:customisable_headers]||{}).reject { |option, _| !CUSTOMISABLE_HTTP_HEADERS.include?(option) }
-    end
-
-    def get_customisable_cookies(options)
-      (options[:customisable_cookies]||{}).reject { |option, _| !CUSTOMISABLE_HTTP_COOKIES.include?(option) }
-    end
-
     # End a pull notification subscription.
     # @see http://msdn.microsoft.com/en-us/library/aa564263.aspx
     #

@@ -101,6 +101,8 @@ module Viewpoint::EWS::Types
         data[:conflict_resolution] = options[:conflict_resolution] || 'AutoResolve'
         data[:send_meeting_invitations_or_cancellations] = options[:send_meeting_invitations_or_cancellations] || 'SendToNone'
         data[:item_changes] = [{item_id: self.item_id, updates: item_updates}]
+        data[:customisable_headers] = options[:customisable_headers]
+
         rm = ews.update_item(data).response_messages.first
         if rm && rm.success?
           self.get_all_properties!
