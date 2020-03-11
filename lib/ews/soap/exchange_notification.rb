@@ -80,7 +80,7 @@ module Viewpoint::EWS::SOAP
     # @see http://msdn.microsoft.com/en-us/library/aa564263.aspx
     #
     # @param [String] subscription_id The Id of the subscription
-    def unsubscribe(subscription_id)
+    def unsubscribe(subscription_id, options: {})
       req = build_soap! do |type, builder|
         if(type == :header)
         else
@@ -92,7 +92,8 @@ module Viewpoint::EWS::SOAP
       end
       options = {
           request_type: 'Unsubscribe',
-          response_class: EwsResponse
+          response_class: EwsResponse,
+          customisable_headers: get_customisable_headers(options)
       }
       do_soap_request(req, options)
     end
