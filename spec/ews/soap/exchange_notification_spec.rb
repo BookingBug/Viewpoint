@@ -59,6 +59,44 @@ describe Viewpoint::EWS::SOAP::ExchangeNotification do
     end
   end
 
+  describe "#unsubscribe" do
+    let(:customisable_headers) { { anchor_mailbox: "mailbox@example.com" } }
+    let(:options) { { customisable_headers: customisable_headers } }
+    let(:req_double) { double(:request) }
+    let(:subscription_id) { 1 }
+
+    context 'when the options argument has a value' do
+      subject(:unsubscribe) { test_instance.unsubscribe(subscription_id, options: options) }
+
+      it "passes the customisable_headers options to the do_soap_request method" do
+        allow(test_instance).to receive(:build_soap!) { req_double }
+        expect(test_instance).to receive(:do_soap_request).with(
+          req_double,
+          request_type: 'Unsubscribe',
+          response_class: Viewpoint::EWS::SOAP::EwsResponse,
+          customisable_headers: customisable_headers
+        )
+        unsubscribe
+      end
+    end
+
+    context 'when the options argument is missing' do
+      subject(:unsubscribe) { test_instance.unsubscribe(subscription_id) }
+
+      it "passes an empty hash as the customisable_headers options to the do_soap_request method" do
+        allow(test_instance).to receive(:build_soap!) { req_double }
+        expect(test_instance).to receive(:do_soap_request).with(
+          req_double, {
+            request_type: 'Unsubscribe',
+            response_class: Viewpoint::EWS::SOAP::EwsResponse,
+            customisable_headers: {}
+          }
+        )
+        unsubscribe
+      end
+    end
+  end
+
   describe "#get_customisable_headers" do
     let(:anchor_mailbox) { "mailbox@example.com" }
     let(:prefer_server_affinity) { true }
