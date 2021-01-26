@@ -135,7 +135,6 @@ module Viewpoint::EWS::Types
         email_address: attendee.email_address
       }
     end
-  end
 
     private
 
