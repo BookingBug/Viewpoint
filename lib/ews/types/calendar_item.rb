@@ -118,6 +118,23 @@ module Viewpoint::EWS::Types
       iso8601_duration_to_seconds(duration)
     end
 
+    def has_attendees?
+      required_attendees.present? || optional_attendees.present?
+    end
+
+    def attendees
+      {
+        required: required_attendees.map { |attendee| attendee_attributes(attendee) },
+        optional: optional_attendees.map { |attendee| attendee_attributes(attendee) }
+      }
+    end
+
+    def attendee_attributes(attendee)
+      {
+        name: attendee.name,
+        email_address: attendee.email_address
+      }
+    end
 
     private
 
